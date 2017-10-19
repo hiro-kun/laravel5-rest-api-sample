@@ -13,14 +13,14 @@ class OrderController extends Controller
         $request = \Request::all();
 
         try {
-            $member = \App\models\Member::find($memberId);
+            $member = \App\Models\Member::find($memberId);
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -46,7 +46,7 @@ class OrderController extends Controller
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -91,14 +91,14 @@ class OrderController extends Controller
         $request = \Request::all();
 
         try {
-            $member = \App\models\Member::find($memberId);
+            $member = \App\Models\Member::find($memberId);
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -125,7 +125,7 @@ class OrderController extends Controller
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(

@@ -10,7 +10,7 @@ class MemberController extends Controller
     // GET v1/members
     public function index()
     {
-        return \App\models\Member::all();
+        return \App\Models\Member::all();
     }
 
     // POST /v1/members
@@ -18,7 +18,7 @@ class MemberController extends Controller
     {
         $request = \Request::all();
 
-        $validationCheckResult = \App\library\Validation\MemberValidation::memberValidate($request);
+        $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
         // バリデーションエラー確認
         if ($validationCheckResult['isError'] === true) {
             return response()->json(
@@ -34,7 +34,7 @@ class MemberController extends Controller
 
         // 既に存在するメールアドレスか確認
         try {
-            $isExistsMember = \App\models\Member::where('email', $request['email'])->first();
+            $isExistsMember = \App\Models\Member::where('email', $request['email'])->first();
         } catch (\Exception $e) {
 
             $errorInfo['file']      = __FILE__;
@@ -42,7 +42,7 @@ class MemberController extends Controller
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -70,7 +70,7 @@ class MemberController extends Controller
 
         // 登録処理
         try {
-            \App\models\Member::create(
+            \App\Models\Member::create(
                 [
                     'status' => 'active',
                     'email'  => $request['email'],
@@ -84,7 +84,7 @@ class MemberController extends Controller
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -98,14 +98,14 @@ class MemberController extends Controller
         }
 
         try {
-            $member = \App\models\Member::where('email', $request['email'])->first();
+            $member = \App\Models\Member::where('email', $request['email'])->first();
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -140,14 +140,14 @@ class MemberController extends Controller
        $request = \Request::all();
 
         try {
-            $memberInfo = \App\models\Member::find($id);
+            $memberInfo = \App\Models\Member::find($id);
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -187,14 +187,14 @@ class MemberController extends Controller
         $request = \Request::all();
 
         try {
-            $memberInfo = \App\models\Member::find($id);
+            $memberInfo = \App\Models\Member::find($id);
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -214,7 +214,7 @@ class MemberController extends Controller
             );
         }
 
-        $validationCheckResult = \App\library\Validation\MemberValidation::memberValidate($request);
+        $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
         if ($validationCheckResult['isError'] === true) {
             return response()->json(
                 $this->errorResponse(
@@ -229,14 +229,14 @@ class MemberController extends Controller
 
         try {
             // 指定されたメールアドレスが既に他人に使われているか
-            $isExistEmail = \App\models\Member::where('email', $request['email'])->where('member_id', '!=', $id)->first();
+            $isExistEmail = \App\Models\Member::where('email', $request['email'])->where('member_id', '!=', $id)->first();
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -258,7 +258,7 @@ class MemberController extends Controller
 
         try {
             // 更新
-            \App\models\Member::where('member_id', $id)
+            \App\Models\Member::where('member_id', $id)
               ->update(
                   [
                       'email' => $request['email'],
@@ -272,7 +272,7 @@ class MemberController extends Controller
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -303,14 +303,14 @@ class MemberController extends Controller
         $request = \Request::all();
 
         try {
-            $memberInfo = \App\models\Member::find($id);
+            $memberInfo = \App\Models\Member::find($id);
         } catch (\Exception $e) {
             $errorInfo['file']      = __FILE__;
             $errorInfo['line']      = __LINE__;
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
@@ -338,7 +338,7 @@ class MemberController extends Controller
             $errorInfo['message']   = $e->getMessage();
             $errorInfo['request']   = $request;
 
-            \App\library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(

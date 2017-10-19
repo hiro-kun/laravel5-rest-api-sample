@@ -1,6 +1,6 @@
 <?php
 
-namespace App\library\Log;
+namespace App\Library\Log;
 
 class ApplicationLog
 {

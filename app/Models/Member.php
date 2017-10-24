@@ -13,6 +13,6 @@ class Member extends Model
 
     public function orders()
     {
-        return $this->hasMany('\App\models\Order', 'member_id');
+        return $this->hasMany('\App\Models\Order', 'member_id');
     }
 }

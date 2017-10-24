@@ -19,7 +19,6 @@ class MemberController extends Controller
         $request = \Request::all();
 
         $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
-        // バリデーションエラー確認
         if ($validationCheckResult['isError'] === true) {
             return response()->json(
                 $this->errorResponse(
@@ -32,21 +31,42 @@ class MemberController extends Controller
             );
         }
 
-        // 既に存在するメールアドレスか確認
+        $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
         try {
-            $isExistsMember = \App\Models\Member::where('email', $request['email'])->first();
-        } catch (\Exception $e) {
-
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            $successResponse = $memberService->storeMember($request);
+        } catch (\App\Exceptions\ApplicationException $e) {
 
             return response()->json(
                 $this->errorResponse(
-                    'System error',
+                    $e->getMessage(),
+                    $e->getErrorField(),
+                    $e->getCode(),
+                    $request['uuid']
+                ),
+                $e->getHttpStatus()
+            );
+
+        } catch (\PDOException $e) {
+
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
+
+            return response()->json(
+                $this->errorResponse(
+                    'DB Error.',
+                    '',
+                    40500,
+                    $request['uuid']
+                ),
+                400
+            );
+
+        } catch (\Exception $e) {
+
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
+
+            return response()->json(
+                $this->errorResponse(
+                    'System Error.',
                     '',
                     40500,
                     $request['uuid']
@@ -54,84 +74,12 @@ class MemberController extends Controller
                 500
             );
         }
-
-        // 既に存在しているメールアドレス
-        if (!is_null($isExistsMember)) {
-            return response()->json(
-                $this->errorResponse(
-                    'Requested email address has already been registered',
-                    'email',
-                    40900,
-                    $request['uuid']
-                ),
-                409
-            );
-        }
-
-        // 登録処理
-        try {
-            \App\Models\Member::create(
-                [
-                    'status' => 'active',
-                    'email'  => $request['email'],
-                    'name'   => $request['name'],
-                    'sex'    => $request['sex']
-                ]
-            );
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System error',
-                    '',
-                    40500,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
-
-        try {
-            $member = \App\Models\Member::where('email', $request['email'])->first();
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System error',
-                    '',
-                    40500,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
-
-        $memberInfoArray = $member->toArray();
-
-        $successResponse['request_id'] = $request['uuid'];
-        $successResponse['_links']     = "v1/members/${memberInfoArray['member_id']}";
-        $successResponse['member_id']  = $memberInfoArray['member_id'];
-        $successResponse['email']      = $memberInfoArray['email'];
-        $successResponse['name']       = $memberInfoArray['name'];
-        $successResponse['sex']        = $memberInfoArray['sex'];
-
 
         return response()->json(
             $successResponse,
             201
         );
+
     }
 
     // GET /v1/members/33
@@ -139,80 +87,60 @@ class MemberController extends Controller
     {
        $request = \Request::all();
 
-        try {
-            $memberInfo = \App\Models\Member::find($id);
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
+       try {
+           $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
+           $successResponse = $memberService->showMember($id, $request);
+       } catch (\App\Exceptions\ApplicationException $e) {
 
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+           return response()->json(
+               $this->errorResponse(
+                   $e->getMessage(),
+                   $e->getErrorField(),
+                   $e->getCode(),
+                   $request['uuid']
+               ),
+               $e->getHttpStatus()
+           );
 
-            return response()->json(
-                $this->errorResponse(
-                    'System error',
-                    '',
-                    40500,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
+       } catch (\PDOException $e) {
 
-        if (is_null($memberInfo)) {
-            return response()->json(
-                $this->errorResponse('Request resource not found', 'member_id', 40400, $request['uuid']),
-                404
-            );
-        }
+           \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
-        $memberInfoArray = $memberInfo->toArray();
+           return response()->json(
+               $this->errorResponse(
+                   'DB Error.',
+                   '',
+                   40500,
+                   $request['uuid']
+               ),
+               400
+           );
 
-        $successResponse['request_id'] = $request['uuid'];
-        $successResponse['member_id']  = $memberInfoArray['member_id'];
-        $successResponse['email']      = $memberInfoArray['email'];
-        $successResponse['name']       = $memberInfoArray['name'];
-        $successResponse['sex']        = $memberInfoArray['sex'];
+       } catch (\Exception $e) {
 
-        return response()->json(
-            $successResponse,
-            200
-        );
+           \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+
+           return response()->json(
+               $this->errorResponse(
+                   'System Error.',
+                   '',
+                   40500,
+                   $request['uuid']
+               ),
+               500
+           );
+       }
+
+       return response()->json(
+           $successResponse,
+           200
+       );
     }
 
     // PUT /v1/members/33
     public function update($id)
     {
         $request = \Request::all();
-
-        try {
-            $memberInfo = \App\Models\Member::find($id);
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System error',
-                    '',
-                    40500,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
-
-        if (is_null($memberInfo)) {
-            return response()->json(
-                $this->errorResponse('RESOURCE_ERROR', '', 'Request resource not found.', 40400, $request['uuid']),
-                404
-            );
-        }
 
         $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
         if ($validationCheckResult['isError'] === true) {
@@ -228,19 +156,41 @@ class MemberController extends Controller
         }
 
         try {
-            // 指定されたメールアドレスが既に他人に使われているか
-            $isExistEmail = \App\Models\Member::where('email', $request['email'])->where('member_id', '!=', $id)->first();
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
+            $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
+            $successResponse = $memberService->updateMember($id, $request);
+        } catch (\App\Exceptions\ApplicationException $e) {
+
+            return response()->json(
+                $this->errorResponse(
+                    $e->getMessage(),
+                    $e->getErrorField(),
+                    $e->getCode(),
+                    $request['uuid']
+                ),
+                $e->getHttpStatus()
+            );
+
+        } catch (\PDOException $e) {
 
             \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
-                    'System error',
+                    'DB Error.',
+                    '',
+                    40500,
+                    $request['uuid']
+                ),
+                400
+            );
+
+        } catch (\Exception $e) {
+
+            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+
+            return response()->json(
+                $this->errorResponse(
+                    'System Error.',
                     '',
                     40500,
                     $request['uuid']
@@ -249,52 +199,10 @@ class MemberController extends Controller
             );
         }
 
-        if (!is_null($isExistEmail)) {
-            return response()->json(
-                $this->errorResponse('Request email adress is already exists. Please input other email adress', 'email', 40900, $request['uuid']),
-                409
-           );
-        }
-
-        try {
-            // 更新
-            \App\Models\Member::where('member_id', $id)
-              ->update(
-                  [
-                      'email' => $request['email'],
-                      'name'  => $request['name'],
-                      'sex'   => $request['sex']
-                  ]
-              );
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System error',
-                    '',
-                    40500,
-                    $request['uuid']
-                ),
-                500
-            );
-         }
-
-         $successResponse['request_id'] = $request['uuid'];
-         $successResponse['member_id']  = $id;
-         $successResponse['email']      = $request['email'];
-         $successResponse['name']       = $request['name'];
-         $successResponse['sex']        = $request['sex'];
-
-         return response()->json(
-             $successResponse,
-             200
-         );
+        return response()->json(
+            $successResponse,
+            200
+        );
     }
 
     // DELETE /v1/members/11
@@ -303,46 +211,41 @@ class MemberController extends Controller
         $request = \Request::all();
 
         try {
-            $memberInfo = \App\Models\Member::find($id);
-        } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
+            $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
+            $memberService->showMember($id, $request);
+        } catch (\App\Exceptions\ApplicationException $e) {
+
+            return response()->json(
+                $this->errorResponse(
+                    $e->getMessage(),
+                    $e->getErrorField(),
+                    $e->getCode(),
+                    $request['uuid']
+                ),
+                $e->getHttpStatus()
+            );
+
+        } catch (\PDOException $e) {
 
             \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
-                    'System error',
+                    'DB Error.',
                     '',
                     40500,
                     $request['uuid']
                 ),
-                500
+                400
             );
-        }
 
-        if (is_null($memberInfo)) {
-            return response()->json(
-                $this->errorResponse('Request resource not found', 'member_id', 40400, $request['uuid']),
-                404
-            );
-        }
-
-        try {
-            $memberInfo->delete();
         } catch (\Exception $e) {
-            $errorInfo['file']      = __FILE__;
-            $errorInfo['line']      = __LINE__;
-            $errorInfo['message']   = $e->getMessage();
-            $errorInfo['request']   = $request;
 
             \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
 
             return response()->json(
                 $this->errorResponse(
-                    'System error',
+                    'System Error.',
                     '',
                     40500,
                     $request['uuid']

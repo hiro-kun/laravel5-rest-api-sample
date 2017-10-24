@@ -1,39 +1,39 @@
 <?php
 
-namespace App\library\Validation;
+namespace App\Library\Validation;
 
 class MemberValidation
 {
     public static function memberValidate()
     {
         $validationResult = [
-            "isError"        => false,
-            "message"   => NULL,
-            "field" => NULL,
+            "isError" => false,
+            "message" => NULL,
+            "field"   => NULL,
         ];
 
         $request = \Request::all();
 
         if (empty($request["email"])) {
-            $validationResult["isError"]        = true;
-            $validationResult["field"] = "email";
-            $validationResult["message"]   = "Field 'email' not found.";
+            $validationResult["isError"] = true;
+            $validationResult["field"]   = "email";
+            $validationResult["message"] = "Field 'email' not found.";
 
             return $validationResult;
         }
 
         if (empty($request["name"])) {
-            $validationResult["isError"]        = true;
-            $validationResult["field"] = "name";
-            $validationResult["message"]   = "Field 'name' not found.";
+            $validationResult["isError"] = true;
+            $validationResult["field"]   = "name";
+            $validationResult["message"] = "Field 'name' not found.";
 
             return $validationResult;
         }
 
         if (empty($request["sex"])) {
-            $validationResult["isError"]        = true;
-            $validationResult["field"] = "sex";
-            $validationResult["message"]   = "Field 'sex' not found.";
+            $validationResult["isError"] = true;
+            $validationResult["field"]   = "sex";
+            $validationResult["message"] = "Field 'sex' not found.";
 
             return $validationResult;
         }
@@ -51,9 +51,9 @@ class MemberValidation
             $emailValidateMessages
         );
         if ($emailValidateResult->fails() === true) {
-            $validationResult["isError"]        = true;
-            $validationResult["field"] = "email";
-            $validationResult["message"]   = $emailValidateResult->getMessageBag()->messages()["email"][0];
+            $validationResult["isError"] = true;
+            $validationResult["field"]   = "email";
+            $validationResult["message"] = $emailValidateResult->getMessageBag()->messages()["email"][0];
 
             return $validationResult;
         }
@@ -71,9 +71,9 @@ class MemberValidation
             $sexValidateMessages
         );
         if ($sexValidateResult->fails() === true) {
-            $validationResult["isError"]        = true;
-            $validationResult["field"] = "sex";
-            $validationResult["message"]   = $sexValidateResult->getMessageBag()->messages()["sex"][0];
+            $validationResult["isError"] = true;
+            $validationResult["field"]   = "sex";
+            $validationResult["message"] = $sexValidateResult->getMessageBag()->messages()["sex"][0];
 
             return $validationResult;
         }

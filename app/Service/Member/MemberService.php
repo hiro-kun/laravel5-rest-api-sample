@@ -2,10 +2,6 @@
 
 namespace App\Service\Member;
 
-/*
-・エラーの番号等はどこかのクラス等で定数化しておく
-*/
-
 class MemberService
 {
     public function storeMember($request)

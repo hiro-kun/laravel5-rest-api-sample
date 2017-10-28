@@ -31,8 +31,8 @@ class MemberController extends Controller
             );
         }
 
-        $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
         try {
+            $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
             $successResponse = $memberService->storeMember($request);
         } catch (\App\Exceptions\ApplicationException $e) {
 

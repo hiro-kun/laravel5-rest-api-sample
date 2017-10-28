@@ -14,5 +14,5 @@ use Illuminate\Http\Request;
 */
 Route::resource('members', 'Member\MemberController', ['except' => ['create', 'edit']]);
 
-Route::get('members/{member_id}/orders/', 'Member\OrderController@orderAllByMemberId');
-Route::get('members/{member_id}/orders/{order_id}', 'Member\OrderController@orderDetailByMemberId');
+Route::get('members/{member_id}/orders/', 'Member\OrderController@showOrderAllByMemberId');
+Route::get('members/{member_id}/orders/{order_id}', 'Member\OrderController@showOrderDetailByMemberId');

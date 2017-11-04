@@ -24,7 +24,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     $validationCheckResult['message'],
                     $validationCheckResult['field'],
-                    40001,
+                    \App\Library\Constant\ApplicationErrorCode::VALIDATION_ERROR,
                     $request['uuid']
                 ),
                 400
@@ -54,7 +54,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     'DB Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
                     $request['uuid']
                 ),
                 400
@@ -68,7 +68,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     'System Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
                     $request['uuid']
                 ),
                 500
@@ -110,7 +110,7 @@ class MemberController extends Controller
                $this->errorResponse(
                    'DB Error.',
                    '',
-                   40500,
+                   \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
                    $request['uuid']
                ),
                400
@@ -124,7 +124,7 @@ class MemberController extends Controller
                $this->errorResponse(
                    'System Error.',
                    '',
-                   40500,
+                   \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
                    $request['uuid']
                ),
                500
@@ -148,7 +148,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     $validationCheckResult['message'],
                     $validationCheckResult['field'],
-                    40001,
+                    \App\Library\Constant\ApplicationErrorCode::VALIDATION_ERROR,
                     $request['uuid']
                 ),
                 400
@@ -178,7 +178,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     'DB Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
                     $request['uuid']
                 ),
                 400
@@ -192,7 +192,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     'System Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
                     $request['uuid']
                 ),
                 500
@@ -233,7 +233,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     'DB Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
                     $request['uuid']
                 ),
                 400
@@ -247,7 +247,7 @@ class MemberController extends Controller
                 $this->errorResponse(
                     'System Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
                     $request['uuid']
                 ),
                 500

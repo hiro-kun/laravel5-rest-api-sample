@@ -8,7 +8,7 @@ class OrderService
     {
         $member = \App\Models\Member::find($memberId);
         if (is_null($member)) {
-            throw new \App\Exceptions\ApplicationException('Request resource not found.', 40400, 'member_id', 404);
+            throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::MEMBER_ID_NOT_FOUND, 'member_id', 404);
         }
         $orders         = $member->orders;
         $orderInfoArray = [];
@@ -38,13 +38,13 @@ class OrderService
     {
         $member = \App\Models\Member::find($memberId);
         if (is_null($member)) {
-            throw new \App\Exceptions\ApplicationException('Request resource not found.', 40400, 'member_id', 404);
+            throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::MEMBER_ID_NOT_FOUND, 'member_id', 404);
         }
         $order     = $member->orders->where('order_id', $orderId)->first();
         $orderInfo = [];
 
         if (is_null($order)) {
-            throw new \App\Exceptions\ApplicationException('Request resource not found.', 40400, 'order_id', 404);
+            throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::ORDER_ID_NOT_FOUND, 'order_id', 404);
         }
         $orderInfo = $order->toArray();
 

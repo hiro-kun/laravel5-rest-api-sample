@@ -36,7 +36,7 @@ class OrderController extends Controller
                 $this->errorResponse(
                     'DB Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
                     $request['uuid']
                 ),
                 400
@@ -50,7 +50,7 @@ class OrderController extends Controller
                 $this->errorResponse(
                     'System Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
                     $request['uuid']
                 ),
                 500
@@ -92,21 +92,21 @@ class OrderController extends Controller
                 $this->errorResponse(
                     'DB Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
                     $request['uuid']
                 ),
                 400
             );
 
         } catch (\Exception $e) {
-            
+
             \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
             return response()->json(
                 $this->errorResponse(
                     'System Error.',
                     '',
-                    40500,
+                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
                     $request['uuid']
                 ),
                 500

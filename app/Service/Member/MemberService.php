@@ -9,7 +9,7 @@ class MemberService
         // 既に存在するメールアドレスか確認
         $isExistsMember = \App\Models\Member::where('email', $request['email'])->first();
         if (!is_null($isExistsMember)) {
-            throw new \App\Exceptions\ApplicationException('Requested email address has already been registered', 40900, 'email', 409);
+            throw new \App\Exceptions\ApplicationException('Requested email address has already been registered', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_NOT_FOUND, 'email', 409);
         }
 
         \App\Models\Member::create(
@@ -38,13 +38,13 @@ class MemberService
     {
         $memberInfo = \App\Models\Member::find($memberId);
         if (is_null($memberInfo)) {
-            throw new \App\Exceptions\ApplicationException('Request resource not found.', 40400, 'email', 404);
+            throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_NOT_FOUND, 'email', 404);
         }
 
         // 指定されたメールアドレスが既に他人に使われているか
         $isExistsMember = \App\Models\Member::where('email', $request['email'])->where('member_id', '!=', $memberId)->first();
         if (!is_null($isExistsMember)) {
-            throw new \App\Exceptions\ApplicationException('Request email adress is already exists. Please input other email adress.', 40400, 'email', 409);
+            throw new \App\Exceptions\ApplicationException('Request email adress is already exists. Please input other email adress.', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_ALREADY_EXISTS, 'email', 409);
         }
 
         // 更新
@@ -68,12 +68,12 @@ class MemberService
 
     public function showMember($memberId, $request)
     {
-        $member          = \App\Models\Member::find($memberId);
-        $memberInfoArray = $member->toArray();
+        $member = \App\Models\Member::find($memberId);
 
-        if (is_null($memberInfoArray)) {
-            throw new \App\Exceptions\ApplicationException('Request resource not found.', 40400, 'member_id', 404);
+        if (is_null($member)) {
+            throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_NOT_FOUND, 'member_id', 404);
         }
+        $memberInfoArray = $member->toArray();
 
         $successResponse['request_id'] = $request['uuid'];
         $successResponse['member_id']  = $memberInfoArray['member_id'];
@@ -88,7 +88,7 @@ class MemberService
     {
         $memberInfo = \App\Models\Member::find($memberId);
         if (is_null($memberInfo)) {
-            throw new \App\Exceptions\ApplicationException('Request resource not found.', 40400, 'member_id', 404);
+            throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_NOT_FOUND, 'member_id', 404);
         }
         $memberInfo->delete();
     }

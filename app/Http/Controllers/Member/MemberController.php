@@ -18,19 +18,6 @@ class MemberController extends Controller
     {
         $request = \Request::all();
 
-        $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
-        if ($validationCheckResult['isError'] === true) {
-            return response()->json(
-                $this->errorResponse(
-                    $validationCheckResult['message'],
-                    $validationCheckResult['field'],
-                    \App\Library\Constant\ApplicationErrorCode::VALIDATION_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-        }
-
         try {
             $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
             $successResponse = $memberService->storeMember($request);
@@ -104,7 +91,7 @@ class MemberController extends Controller
 
        } catch (\PDOException $e) {
 
-           \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+           \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
            return response()->json(
                $this->errorResponse(
@@ -118,7 +105,7 @@ class MemberController extends Controller
 
        } catch (\Exception $e) {
 
-           \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+           \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
            return response()->json(
                $this->errorResponse(
@@ -142,19 +129,6 @@ class MemberController extends Controller
     {
         $request = \Request::all();
 
-        $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
-        if ($validationCheckResult['isError'] === true) {
-            return response()->json(
-                $this->errorResponse(
-                    $validationCheckResult['message'],
-                    $validationCheckResult['field'],
-                    \App\Library\Constant\ApplicationErrorCode::VALIDATION_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-        }
-
         try {
             $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
             $successResponse = $memberService->updateMember($id, $request);
@@ -172,7 +146,7 @@ class MemberController extends Controller
 
         } catch (\PDOException $e) {
 
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
             return response()->json(
                 $this->errorResponse(
@@ -186,7 +160,7 @@ class MemberController extends Controller
 
         } catch (\Exception $e) {
 
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
             return response()->json(
                 $this->errorResponse(
@@ -227,7 +201,7 @@ class MemberController extends Controller
 
         } catch (\PDOException $e) {
 
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
             return response()->json(
                 $this->errorResponse(
@@ -241,7 +215,7 @@ class MemberController extends Controller
 
         } catch (\Exception $e) {
 
-            \App\Library\Log\ApplicationLog::makeErrorLog($errorInfo);
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
             return response()->json(
                 $this->errorResponse(

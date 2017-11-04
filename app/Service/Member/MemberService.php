@@ -6,6 +6,11 @@ class MemberService
 {
     public function storeMember($request)
     {
+        $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
+        if ($validationCheckResult['isError'] === true) {
+            throw new \App\Exceptions\ApplicationException($validationCheckResult['message'], \App\Library\Constant\ApplicationErrorCode::VALIDATION_ERROR, $validationCheckResult['field'], 400);
+        }
+
         // 既に存在するメールアドレスか確認
         $isExistsMember = \App\Models\Member::where('email', $request['email'])->first();
         if (!is_null($isExistsMember)) {
@@ -36,6 +41,11 @@ class MemberService
 
     public function updateMember($memberId, $request)
     {
+        $validationCheckResult = \App\Library\Validation\MemberValidation::memberValidate($request);
+        if ($validationCheckResult['isError'] === true) {
+            throw new \App\Exceptions\ApplicationException($validationCheckResult['message'], \App\Library\Constant\ApplicationErrorCode::VALIDATION_ERROR, $validationCheckResult['field'], 400);
+        }
+
         $memberInfo = \App\Models\Member::find($memberId);
         if (is_null($memberInfo)) {
             throw new \App\Exceptions\ApplicationException('Request resource not found.', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_NOT_FOUND, 'email', 404);

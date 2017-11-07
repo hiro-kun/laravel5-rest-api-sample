@@ -17,7 +17,7 @@ class ServiceFactory
         $filePath = dirname(__FILE__) . '/' . $categoryName . '/' . $serviceName . 'Service.php';
 
         if (file_exists($filePath) === false) {
-            throw new \App\Exceptions\ApplicationException();
+            throw new \Exception();
         }
     }
 }

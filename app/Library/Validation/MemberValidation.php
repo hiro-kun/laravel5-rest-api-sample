@@ -4,14 +4,13 @@ namespace App\Library\Validation;
 
 class MemberValidation
 {
-    public static function memberValidate()
+    public static function memberValidate($request)
     {
         $validationResult = [
             "isError" => false,
             "message" => NULL,
             "field"   => NULL,
         ];
-        $request = \Request::all();
 
         $request['email'] = $request['email'] ?? '';
         $request['name']  = $request['name'] ?? '';

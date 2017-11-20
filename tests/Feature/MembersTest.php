@@ -38,6 +38,8 @@ class MembersTest extends TestCase
         unset($responseArray['request_id']);
 
         $this->assertSame($expectResponse, $responseArray);
+
+        $response->assertStatus(200);
     }
 
     public function testFailedShowMember()
@@ -53,5 +55,7 @@ class MembersTest extends TestCase
         $expectResponse['errors']['code']  = 4002;
 
         $this->assertSame($expectResponse, $responseArray);
+
+        $response->assertStatus(404);
     }
 }

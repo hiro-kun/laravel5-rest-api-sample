@@ -61,13 +61,13 @@ class ExampleTest extends TestCase
         $actual['name']      = $memberinfo->name;
         $actual['sex']       = $memberinfo->sex;
 
-        $expectData['member_id'] = 1;
-        $expectData['status']    = 'active';
-        $expectData['email']     = $request['email'];
-        $expectData['name']      = $request['name'];
-        $expectData['sex']       = $request['sex'];
+        $expectResponse['member_id'] = 1;
+        $expectResponse['status']    = 'active';
+        $expectResponse['email']     = $request['email'];
+        $expectResponse['name']      = $request['name'];
+        $expectResponse['sex']       = $request['sex'];
 
-        $this->assertSame($expectData, $actual);
+        $this->assertSame($expectResponse, $actual);
     }
 
     public function testSuccessShowMember()
@@ -81,13 +81,13 @@ class ExampleTest extends TestCase
         $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
         $actual        = $memberService->showMember($memberId, $request);
 
-        $expectData['request_id'] = $request['uuid'];
-        $expectData['member_id']  = $memberId;
-        $expectData['email']      = 'hoge@huga.com';
-        $expectData['name']       = 'piyopiyo';
-        $expectData['sex']        = 'male';
+        $expectResponse['request_id'] = $request['uuid'];
+        $expectResponse['member_id']  = $memberId;
+        $expectResponse['email']      = 'hoge@huga.com';
+        $expectResponse['name']       = 'piyopiyo';
+        $expectResponse['sex']        = 'male';
 
-        $this->assertSame($expectData, $actual);
+        $this->assertSame($expectResponse, $actual);
     }
 
     public function testFailedStoreMemberDuplicationEmail()

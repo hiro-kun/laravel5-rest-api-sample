@@ -44,12 +44,46 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // 404
-        if($exception->getStatusCode() == 404) {
-            return response()->json([
-                'status' => 404,
-                'errors' => 'Request page not found.'
-            ], 404);
+        try {
+            throw $exception;
+        } catch (\App\Exceptions\ApplicationException $e) {
+
+            return response()->json(
+                $this->errorResponse(
+                    $e->getMessage(),
+                    $e->getErrorField(),
+                    $e->getCode(),
+                    $request['uuid']
+                ),
+                $e->getHttpStatus()
+            );
+        } catch (\PDOException $e) {
+
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
+
+            return response()->json(
+                $this->errorResponse(
+                    'DB Error.',
+                    '',
+                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
+                    $request['uuid']
+                ),
+                400
+            );
+
+        } catch (\Exception $e) {
+
+            \App\Library\Log\ApplicationLog::makeErrorLog($e);
+
+            return response()->json(
+                $this->errorResponse(
+                    'System Error.',
+                    '',
+                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
+                    $request['uuid']
+                ),
+                500
+            );
         }
 
         return parent::render($request, $exception);
@@ -69,5 +103,15 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest(route('login'));
+    }
+
+    private function errorResponse($message, $field, $code, $requestId)
+    {
+        $errorResponse["request_id"]      = $requestId;
+        $errorResponse["message"]         = $message;
+        $errorResponse["errors"]["field"] = $field;
+        $errorResponse["errors"]["code"]  = $code;
+
+        return $errorResponse;
     }
 }

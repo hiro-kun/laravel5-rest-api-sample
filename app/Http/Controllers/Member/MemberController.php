@@ -18,55 +18,13 @@ class MemberController extends Controller
     {
         $request = \Request::all();
 
-        try {
-            $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
-            $successResponse = $memberService->storeMember($request);
-        } catch (\App\Exceptions\ApplicationException $e) {
-
-            return response()->json(
-                $this->errorResponse(
-                    $e->getMessage(),
-                    $e->getErrorField(),
-                    $e->getCode(),
-                    $request['uuid']
-                ),
-                $e->getHttpStatus()
-            );
-
-        } catch (\PDOException $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'DB Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-
-        } catch (\Exception $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
+        $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
+        $successResponse = $memberService->storeMember($request);
 
         return response()->json(
             $successResponse,
             201
         );
-
     }
 
     // GET /v1/members/33
@@ -74,49 +32,8 @@ class MemberController extends Controller
     {
        $request = \Request::all();
 
-       try {
-           $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
-           $successResponse = $memberService->showMember($id, $request);
-       } catch (\App\Exceptions\ApplicationException $e) {
-
-           return response()->json(
-               $this->errorResponse(
-                   $e->getMessage(),
-                   $e->getErrorField(),
-                   $e->getCode(),
-                   $request['uuid']
-               ),
-               $e->getHttpStatus()
-           );
-
-       } catch (\PDOException $e) {
-
-           \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-           return response()->json(
-               $this->errorResponse(
-                   'DB Error.',
-                   '',
-                   \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
-                   $request['uuid']
-               ),
-               400
-           );
-
-       } catch (\Exception $e) {
-
-           \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-           return response()->json(
-               $this->errorResponse(
-                   'System Error.',
-                   '',
-                   \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
-                   $request['uuid']
-               ),
-               500
-           );
-       }
+       $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
+       $successResponse = $memberService->showMember($id, $request);
 
        return response()->json(
            $successResponse,
@@ -129,49 +46,8 @@ class MemberController extends Controller
     {
         $request = \Request::all();
 
-        try {
-            $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
-            $successResponse = $memberService->updateMember($id, $request);
-        } catch (\App\Exceptions\ApplicationException $e) {
-
-            return response()->json(
-                $this->errorResponse(
-                    $e->getMessage(),
-                    $e->getErrorField(),
-                    $e->getCode(),
-                    $request['uuid']
-                ),
-                $e->getHttpStatus()
-            );
-
-        } catch (\PDOException $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'DB Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-
-        } catch (\Exception $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
+        $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
+        $successResponse = $memberService->updateMember($id, $request);
 
         return response()->json(
             $successResponse,
@@ -184,49 +60,8 @@ class MemberController extends Controller
     {
         $request = \Request::all();
 
-        try {
-            $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
-            $memberService->showMember($id, $request);
-        } catch (\App\Exceptions\ApplicationException $e) {
-
-            return response()->json(
-                $this->errorResponse(
-                    $e->getMessage(),
-                    $e->getErrorField(),
-                    $e->getCode(),
-                    $request['uuid']
-                ),
-                $e->getHttpStatus()
-            );
-
-        } catch (\PDOException $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'DB Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-
-        } catch (\Exception $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
+        $memberService = \App\Service\ServiceFactory::create('Member', 'Member');
+        $memberService->showMember($id, $request);
 
         return response()->json('', 204);
     }

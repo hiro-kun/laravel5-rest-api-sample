@@ -12,50 +12,8 @@ class OrderController extends Controller
     {
         $request = \Request::all();
 
-        try {
-            $orderService    = \App\Service\ServiceFactory::create('Member', 'Order');
-            $successResponse = $orderService->showOrderAllByMemberId($memberId, $request);
-
-        }  catch (\App\Exceptions\ApplicationException $e) {
-
-            return response()->json(
-                $this->errorResponse(
-                    $e->getMessage(),
-                    $e->getErrorField(),
-                    $e->getCode(),
-                    $request['uuid']
-                ),
-                $e->getHttpStatus()
-            );
-
-        } catch (\PDOException $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'DB Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-
-        } catch (\Exception $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
+        $orderService    = \App\Service\ServiceFactory::create('Member', 'Order');
+        $successResponse = $orderService->showOrderAllByMemberId($memberId, $request);
 
         return response()->json(
             $successResponse,
@@ -68,50 +26,8 @@ class OrderController extends Controller
     {
         $request = \Request::all();
 
-        try {
-            $orderService    = \App\Service\ServiceFactory::create('Member', 'Order');
-            $successResponse = $orderService->showOrderDetailByMemberId($memberId, $orderId, $request);
-
-        }  catch (\App\Exceptions\ApplicationException $e) {
-
-            return response()->json(
-                $this->errorResponse(
-                    $e->getMessage(),
-                    $e->getErrorField(),
-                    $e->getCode(),
-                    $request['uuid']
-                ),
-                $e->getHttpStatus()
-            );
-
-        } catch (\PDOException $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'DB Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::DB_ERROR,
-                    $request['uuid']
-                ),
-                400
-            );
-
-        } catch (\Exception $e) {
-
-            \App\Library\Log\ApplicationLog::makeErrorLog($e);
-
-            return response()->json(
-                $this->errorResponse(
-                    'System Error.',
-                    '',
-                    \App\Library\Constant\ApplicationErrorCode::SYSTEM_ERROR,
-                    $request['uuid']
-                ),
-                500
-            );
-        }
+        $orderService    = \App\Service\ServiceFactory::create('Member', 'Order');
+        $successResponse = $orderService->showOrderDetailByMemberId($memberId, $orderId, $request);
 
         return response()->json(
             $successResponse,

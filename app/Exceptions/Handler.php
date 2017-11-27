@@ -58,7 +58,6 @@ class Handler extends ExceptionHandler
         try {
             throw $exception;
         } catch (\App\Exceptions\ApplicationException $e) {
-
             return response()->json(
                 $this->errorResponse(
                     $e->getMessage(),
@@ -69,7 +68,6 @@ class Handler extends ExceptionHandler
                 $e->getHttpStatus()
             );
         } catch (\PDOException $e) {
-
             if ($isDebug === true) {
                 var_dump($e);
                 exit;
@@ -86,9 +84,7 @@ class Handler extends ExceptionHandler
                 ),
                 400
             );
-
         } catch (\Throwable $e) {
-
             if ($isDebug === true) {
                 var_dump($e);
                 exit;

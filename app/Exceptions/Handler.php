@@ -44,6 +44,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $isDebug = false;
+        $request = $request->all();
+
+        // Keyが設定されていない場合は初期化
+        $request['debug'] = $request['debug'] ?? '';
+
+        // debug判定
+        if (\App::environment() === 'local' && $request['debug'] === '1') {
+            $isDebug = true;
+        }
+
         try {
             throw $exception;
         } catch (\App\Exceptions\ApplicationException $e) {
@@ -59,6 +70,11 @@ class Handler extends ExceptionHandler
             );
         } catch (\PDOException $e) {
 
+            if ($isDebug === true) {
+                var_dump($e);
+                exit;
+            }
+
             \App\Library\Log\ApplicationLog::makeErrorLog($e);
 
             return response()->json(
@@ -71,7 +87,12 @@ class Handler extends ExceptionHandler
                 400
             );
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+
+            if ($isDebug === true) {
+                var_dump($e);
+                exit;
+            }
 
             \App\Library\Log\ApplicationLog::makeErrorLog($e);
 

@@ -30,12 +30,12 @@ class MemberController extends Controller
     // GET /v1/members/33
     public function show($id)
     {
-       $request = \Request::all();
+        $request = \Request::all();
 
-       $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
-       $successResponse = $memberService->showMember($id, $request);
+        $memberService   = \App\Service\ServiceFactory::create('Member', 'Member');
+        $successResponse = $memberService->showMember($id, $request);
 
-       return response()->json(
+        return response()->json(
            $successResponse,
            200
        );

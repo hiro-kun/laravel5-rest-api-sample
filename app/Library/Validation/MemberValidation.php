@@ -8,8 +8,8 @@ class MemberValidation
     {
         $validationResult = [
             "isError" => false,
-            "message" => NULL,
-            "field"   => NULL,
+            "message" => null,
+            "field"   => null,
         ];
 
         $request['email'] = $request['email'] ?? '';

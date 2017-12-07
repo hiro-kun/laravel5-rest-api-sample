@@ -17,12 +17,12 @@ Laravelでユーザー登録、購入情報管理を行うRest APIサンプル
 |PUT /v1/members/{member_id}|ユーザー情報の更新|
 |DELETE /v1/members/{member_id}|ユーザー情報の削除|
 |GET /v1/members/{member_id}/orders|ユーザー購入情報の参照【全件】|
-|GET /v1/members/{order_id}/orders/{member_id}|ユーザー購入情報の参照【購入ID指定】|
+|GET /v1/members/{member_id}/orders/{order_id}|ユーザー購入情報の参照【購入ID指定】|
 
 ### パラメーター
 
 ```
-POST /v1/members/{member_id}
+POST /v1/members/
 ```
 |キー名|説明|例|必須|
 |---|---|---|---|

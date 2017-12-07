@@ -17,7 +17,7 @@ class MemberService
             throw new \App\Exceptions\ApplicationException('Requested email address has already been registered', \App\Library\Constant\ApplicationErrorCode::EMAIL_ADRESS_NOT_FOUND, 'email', 409);
         }
 
-        \App\Models\Member::create(
+        $member = \App\Models\Member::create(
             [
                 'status' => 'active',
                 'email'  => $request['email'],
@@ -26,7 +26,6 @@ class MemberService
             ]
         );
 
-        $member          = \App\Models\Member::where('email', $request['email'])->first();
         $memberInfoArray = $member->toArray();
 
         $successResponse['request_id'] = $request['uuid'];

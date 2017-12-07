@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
-    // /v1/members/1/orders
+    // GET /v1/members/1/orders
     public function showOrderAllByMemberId($memberId)
     {
         $request = \Request::all();
@@ -21,7 +21,7 @@ class OrderController extends Controller
         );
     }
 
-    // /v1/members/1/orders/1
+    // GET /v1/members/1/orders/1
     public function showOrderDetailByMemberId($memberId, $orderId)
     {
         $request = \Request::all();

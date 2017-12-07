@@ -22,7 +22,7 @@ Laravelでユーザー登録、購入情報管理を行うRest APIサンプル
 ### パラメーター
 
 ```
-POST /v1/members/{member_id}
+POST /v1/members/
 ```
 |キー名|説明|例|必須|
 |---|---|---|---|
